@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">تحميل...</title> <style>
-        /* CSS للتصميم الأساسي */
+       
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            direction: rtl; /* لدعم اللغة العربية */
+            direction: rtl; 
             text-align: right;
             background-color: #f4f7f6;
             color: #333;
@@ -45,9 +45,9 @@
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* للمحاذاة لليمين مع RTL */
+            align-items: flex-end; 
         }
-        .product-item h3 { /* غيرت h2 إلى h3 للمنتجات لتسلسل العناوين */
+        .product-item h3 { 
             margin-top: 0;
             color: #34495e;
             font-size: 1.2em;
@@ -93,7 +93,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 1em;
-            box-sizing: border-box; /* لضمان عدم تجاوز العرض المحدد */
+            box-sizing: border-box; 
         }
         button {
             padding: 12px 25px;
@@ -131,7 +131,7 @@
             font-size: 1.2em;
             margin-top: 50px;
             color: #7f8c8d;
-            grid-column: 1 / -1; /* لجعل رسالة التحميل في منتصف كل الأعمدة */
+            grid-column: 1 / -1;
         }
     </style>
 </head>
@@ -156,13 +156,13 @@
     </div>
 
     <script>
-        // ************ مهم جداً: استبدل هذا بالرابط الذي حصلت عليه من نشر Apps Script ************
+       
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwazlkQjcN6G2N5yOE3VCUEE-68OgUUN-kpyfACJM4RCScNmupBoP9S6W2EBRY6t_I4/exec';
         // ***********************************************************************************
 
-        let productsData = []; // لتخزين بيانات المنتجات المحملة
+        let productsData = []; 
 
-        // دالة لجلب الإعدادات من Google Sheet وتحديث الصفحة
+        
         async function loadSettings() {
             try {
                 const response = await fetch(`${WEB_APP_URL}?action=getSettings`);
@@ -174,19 +174,19 @@
                 if (settings.WelcomeMessage) {
                     document.getElementById('welcome-message').textContent = settings.WelcomeMessage;
                 }
-                // يمكنك إضافة المزيد من الإعدادات هنا وتحديث عناصر أخرى
-                // مثال: إذا كان لديك ContactPhone في Settings، يمكنك إظهاره
-                // if (settings.ContactPhone) {
-                //     const contactDiv = document.createElement('div');
-                //     contactDiv.innerHTML = `<p>للتواصل: ${settings.ContactPhone}</p>`;
-                //     document.querySelector('.container').appendChild(contactDiv);
-                // }
+               // >>>>>
+                 if (settings.ContactPhone) {
+                     const contactDiv = document.createElement('div');
+                  contactDiv.innerHTML = `<p>للتواصل: ${settings.ContactPhone}</p>`;
+                    document.querySelector('.container').appendChild(contactDiv);
+                 }
+                //>>>>>
             } catch (error) {
                 console.error("خطأ في تحميل الإعدادات:", error);
             }
         }
 
-        // دالة لتحميل المنتجات من Google Sheet عبر Apps Script
+        
         async function loadProducts() {
             try {
                 const response = await fetch(`${WEB_APP_URL}?action=getProducts`);
@@ -201,10 +201,10 @@
             }
         }
 
-        // دالة لعرض المنتجات في الصفحة
+       
         function renderProducts() {
             const productListDiv = document.getElementById('product-list');
-            productListDiv.innerHTML = ''; // مسح رسالة التحميل
+            productListDiv.innerHTML = ''; 
 
             if (productsData.length === 0) {
                 productListDiv.innerHTML = '<p>لا توجد منتجات متاحة حالياً.</p>';
@@ -226,13 +226,13 @@
             });
         }
 
-        // دالة لإرسال الطلب
+       
         async function submitOrder() {
             const customerName = document.getElementById('customer-name').value.trim();
             const notes = document.getElementById('notes').value.trim();
             const responseMessageDiv = document.getElementById('response-message');
             responseMessageDiv.textContent = '';
-            responseMessageDiv.className = 'message'; // إعادة تعيين الكلاسات
+            responseMessageDiv.className = 'message'; 
 
             if (!customerName) {
                 responseMessageDiv.textContent = 'الرجاء إدخال اسم المحل الخاص بك.';
@@ -242,7 +242,7 @@
 
             const items = [];
             let totalAmount = 0;
-            let hasItems = false; // للتأكد من وجود منتجات مطلوبة
+            let hasItems = false; 
 
             productsData.forEach(product => {
                 const quantityInput = document.getElementById(`qty-${product.ID}`);
@@ -267,7 +267,7 @@
 
             const orderData = {
                 customerName: customerName,
-                items: items, // هذه ستكون مصفوفة من الكائنات
+                items: items,
                 totalAmount: totalAmount,
                 notes: notes
             };
@@ -289,7 +289,7 @@
                 if (result.success) {
                     responseMessageDiv.textContent = 'تم إرسال طلبك بنجاح! رقم الطلب: ' + result.orderId;
                     responseMessageDiv.classList.add('success');
-                    // إعادة تعيين النموذج
+                    
                     document.getElementById('customer-name').value = '';
                     document.getElementById('notes').value = '';
                     productsData.forEach(product => {
@@ -306,7 +306,7 @@
             }
         }
 
-        // تحميل الإعدادات والمنتجات عند تحميل الصفحة
+       
         loadSettings();
         loadProducts();
     </script>
