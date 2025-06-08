@@ -228,6 +228,7 @@
 
         // دالة لإرسال الطلب
       // دالة لإرسال الطلب
+// دالة لإرسال الطلب (عبر GET)
 async function submitOrder() {
     const customerName = document.getElementById('customer-name').value.trim();
     const notes = document.getElementById('notes').value.trim();
@@ -266,21 +267,18 @@ async function submitOrder() {
         return;
     }
 
-    // ***** التغيير هنا: تجهيز البيانات لـ application/x-www-form-urlencoded *****
-    const formData = new URLSearchParams();
-    formData.append('action', 'submitOrder'); // إضافة 'action' لتحديد نوع العملية في Apps Script
-    formData.append('customerName', customerName);
-    formData.append('notes', notes);
-    formData.append('totalAmount', totalAmount);
-    formData.append('items', JSON.stringify(items)); // المنتجات ستبقى كـ JSON string
+    // ***** التغيير هنا: تجهيز البيانات لـ GET (معلمات URL) *****
+    const params = new URLSearchParams();
+    params.append('action', 'submitOrder'); // لإخبار Apps Script بأن هذه عملية إرسال طلب
+    params.append('customerName', customerName);
+    params.append('notes', notes);
+    params.append('totalAmount', totalAmount);
+    params.append('items', JSON.stringify(items)); // المنتجات كـ JSON string داخل المعلمات
 
     try {
-        const response = await fetch(WEB_APP_URL, {
-            method: 'POST',
-            // ***** التغيير هنا: نوع المحتوى *****
-            // لا نحتاج لتعيين 'Content-Type' يدوياً هنا، fetch ستقوم بذلك تلقائياً لـ URLSearchParams
-            // headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-            body: formData // إرسال formData مباشرة
+        // ***** التغيير هنا: استخدام fetch بـ method GET و إضافة المعلمات إلى URL *****
+        const response = await fetch(`<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`, {
+            method: 'GET' // تغيير طريقة الطلب إلى GET
         });
 
         if (!response.ok) {
