@@ -227,84 +227,86 @@
         }
 
         // دالة لإرسال الطلب
-        async function submitOrder() {
-            const customerName = document.getElementById('customer-name').value.trim();
-            const notes = document.getElementById('notes').value.trim();
-            const responseMessageDiv = document.getElementById('response-message');
-            responseMessageDiv.textContent = '';
-            responseMessageDiv.className = 'message'; // إعادة تعيين الكلاسات
+      // دالة لإرسال الطلب
+async function submitOrder() {
+    const customerName = document.getElementById('customer-name').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+    const responseMessageDiv = document.getElementById('response-message');
+    responseMessageDiv.textContent = '';
+    responseMessageDiv.className = 'message';
 
-            if (!customerName) {
-                responseMessageDiv.textContent = 'الرجاء إدخال اسم المحل الخاص بك.';
-                responseMessageDiv.classList.add('error');
-                return;
-            }
+    if (!customerName) {
+        responseMessageDiv.textContent = 'الرجاء إدخال اسم المحل الخاص بك.';
+        responseMessageDiv.classList.add('error');
+        return;
+    }
 
-            const items = [];
-            let totalAmount = 0;
-            let hasItems = false; // للتأكد من وجود منتجات مطلوبة
+    const items = [];
+    let totalAmount = 0;
+    let hasItems = false;
 
-            productsData.forEach(product => {
-                const quantityInput = document.getElementById(`qty-${product.ID}`);
-                const quantity = parseInt(quantityInput.value);
-                if (quantity > 0) {
-                    items.push({
-                        productId: product.ID,
-                        productName: product.Name,
-                        quantity: quantity,
-                        priceAtOrder: product.Price
-                    });
-                    totalAmount += quantity * product.Price;
-                    hasItems = true;
-                }
+    productsData.forEach(product => {
+        const quantityInput = document.getElementById(`qty-${product.ID}`);
+        const quantity = parseInt(quantityInput.value);
+        if (quantity > 0) {
+            items.push({
+                productId: product.ID,
+                productName: product.Name,
+                quantity: quantity,
+                priceAtOrder: product.Price
             });
-
-            if (!hasItems) {
-                responseMessageDiv.textContent = 'الرجاء تحديد كمية لمنتج واحد على الأقل.';
-                responseMessageDiv.classList.add('error');
-                return;
-            }
-
-            const orderData = {
-                customerName: customerName,
-                items: items, // هذه ستكون مصفوفة من الكائنات
-                totalAmount: totalAmount,
-                notes: notes
-            };
-
-            try {
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(orderData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('فشل إرسال الطلب: ' + response.statusText);
-                }
-
-                const result = await response.json();
-                if (result.success) {
-                    responseMessageDiv.textContent = 'تم إرسال طلبك بنجاح! رقم الطلب: ' + result.orderId;
-                    responseMessageDiv.classList.add('success');
-                    // إعادة تعيين النموذج
-                    document.getElementById('customer-name').value = '';
-                    document.getElementById('notes').value = '';
-                    productsData.forEach(product => {
-                        document.getElementById(`qty-${product.ID}`).value = '0';
-                    });
-                } else {
-                    responseMessageDiv.textContent = 'حدث خطأ: ' + result.message;
-                    responseMessageDiv.classList.add('error');
-                }
-            } catch (error) {
-                console.error("خطأ في إرسال الطلب:", error);
-                responseMessageDiv.textContent = 'حدث خطأ في الاتصال بالخادم. الرجاء المحاولة لاحقاً.';
-                responseMessageDiv.classList.add('error');
-            }
+            totalAmount += quantity * product.Price;
+            hasItems = true;
         }
+    });
+
+    if (!hasItems) {
+        responseMessageDiv.textContent = 'الرجاء تحديد كمية لمنتج واحد على الأقل.';
+        responseMessageDiv.classList.add('error');
+        return;
+    }
+
+    // ***** التغيير هنا: تجهيز البيانات لـ application/x-www-form-urlencoded *****
+    const formData = new URLSearchParams();
+    formData.append('action', 'submitOrder'); // إضافة 'action' لتحديد نوع العملية في Apps Script
+    formData.append('customerName', customerName);
+    formData.append('notes', notes);
+    formData.append('totalAmount', totalAmount);
+    formData.append('items', JSON.stringify(items)); // المنتجات ستبقى كـ JSON string
+
+    try {
+        const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            // ***** التغيير هنا: نوع المحتوى *****
+            // لا نحتاج لتعيين 'Content-Type' يدوياً هنا، fetch ستقوم بذلك تلقائياً لـ URLSearchParams
+            // headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
+            body: formData // إرسال formData مباشرة
+        });
+
+        if (!response.ok) {
+            throw new Error('فشل إرسال الطلب: ' + response.statusText);
+        }
+
+        const result = await response.json();
+        if (result.success) {
+            responseMessageDiv.textContent = 'تم إرسال طلبك بنجاح! رقم الطلب: ' + result.orderId;
+            responseMessageDiv.classList.add('success');
+            // إعادة تعيين النموذج
+            document.getElementById('customer-name').value = '';
+            document.getElementById('notes').value = '';
+            productsData.forEach(product => {
+                document.getElementById(`qty-${product.ID}`).value = '0';
+            });
+        } else {
+            responseMessageDiv.textContent = 'حدث خطأ: ' + result.message;
+            responseMessageDiv.classList.add('error');
+        }
+    } catch (error) {
+        console.error("خطأ في إرسال الطلب:", error);
+        responseMessageDiv.textContent = 'حدث خطأ في الاتصال بالخادم. الرجاء المحاولة لاحقاً.';
+        responseMessageDiv.classList.add('error');
+    }
+}
 
         // تحميل الإعدادات والمنتجات عند تحميل الصفحة
         loadSettings();
