@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">تحميل...</title> <style>
-        /* CSS للتصميم الأساسي */
+    <title id="page-title">Dakran >> Order </title> <style>
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            direction: rtl; /* لدعم اللغة العربية */
+            direction: rtl; 
             text-align: right;
             background-color: #f4f7f6;
             color: #333;
@@ -45,9 +45,9 @@
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* للمحاذاة لليمين مع RTL */
+            align-items: flex-end; 
         }
-        .product-item h3 { /* غيرت h2 إلى h3 للمنتجات لتسلسل العناوين */
+        .product-item h3 { 
             margin-top: 0;
             color: #34495e;
             font-size: 1.2em;
@@ -93,7 +93,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 1em;
-            box-sizing: border-box; /* لضمان عدم تجاوز العرض المحدد */
+            box-sizing: border-box; 
         }
         button {
             padding: 12px 25px;
@@ -131,7 +131,7 @@
             font-size: 1.2em;
             margin-top: 50px;
             color: #7f8c8d;
-            grid-column: 1 / -1; /* لجعل رسالة التحميل في منتصف كل الأعمدة */
+            grid-column: 1 / -1; 
         }
     </style>
 </head>
@@ -156,8 +156,8 @@
     </div>
 
     <script>
-        // ************ مهم جداً: استبدل هذا بالرابط الصحيح لتطبيق الويب الخاص بك من Google Apps Script ************
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwlrzbHUppbmvnAZGOJXxDkrPCnE-ki1GAXKKAk5OqmtVNYhkFImBgGVdYLc24lG5szMg/exec'; // رابطك يجب أن يبدأ بـ https://script.google.com/macros/s/.../exec
+        
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwlrzbHUppbmvnAZGOJXxDkrPCnE-ki1GAXKKAk5OqmtVNYhkFImBgGVdYLc24lG5szMg/exec'; 
         // *******************************************************************************************************
 
         let productsData = []; 
@@ -216,7 +216,7 @@
             });
         }
 
-        // دالة لإرسال الطلب (عبر GET)
+        
         async function submitOrder() {
             const customerName = document.getElementById('customer-name').value.trim();
             const notes = document.getElementById('notes').value.trim();
