@@ -1,5 +1,5 @@
  
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwlrzbHUppbmvnAZGOJXxDkrPCnE-ki1GAXKKAk5OqmtVNYhkFImBgGVdYLc24lG5szMg/exec'; 
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzjglDQXkKhdkKjgexFThx1hlFdFZzJ78m8ZJYh0TloNGxXctTmtWZW_QcQ31YHuGlzzg/exec'; 
         // *******************************************************************************************************
 
 const loggedInUser = localStorage.getItem('loggedInUser');
