@@ -152,9 +152,9 @@ async function submitOrder() {
     params.append('submittedByCustomerId', customerId); // *** جديد: معرف العميل المرسل ***
 
     try {
-        const response = await fetch(`<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`, {
-            method: 'GET' 
-        });
+       const response = await fetch(`<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`, {
+    method: 'GET' 
+});
 
         if (!response.ok) {
             throw new Error('فشل إرسال الطلب: ' + response.statusText);
