@@ -6,33 +6,94 @@ const loggedInUser = localStorage.getItem('loggedInUser');
 let currentUserData = null;
 
 if (!loggedInUser) {
-    // إذا لم يكن المستخدم مسجلاً، أعد توجيهه إلى صفحة تسجيل الدخول
+   
     window.location.href = 'login.html'; 
 } else {
     currentUserData = JSON.parse(loggedInUser);
-    // تحديث رسالة الترحيب باسم المستخدم واسم المحل
+   
     document.getElementById('display-username').textContent = currentUserData.username;
     document.getElementById('display-shopname').textContent = currentUserData.shopName;
-    // ملء حقل اسم المحل في نموذج الطلب
+    
     document.getElementById('customer-name').value = currentUserData.shopName;
 
-    // منطق زر تسجيل الخروج
+    
     document.getElementById('logout-button').addEventListener('click', () => {
-        localStorage.removeItem('loggedInUser'); // حذف بيانات الجلسة
-        window.location.href = 'login.html'; // إعادة توجيه إلى صفحة تسجيل الدخول
+        localStorage.removeItem('loggedInUser'); 
+        window.location.href = 'login.html';
     });
 }
 
-// *** نهاية منطق التحقق من تسجيل الدخول ***
+
 
 
 let allProducts = []; 
 let displayedProducts = []; 
 
-// ... باقي الدوال (loadSettings, loadProducts, populateCategories, filterProducts, renderDisplayedProducts) تبقى كما هي ...
+//*******
 
 
-// دالة لإرسال الطلب (عبر GET)
+ async function loadSettings() {
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=getSettings`);
+                const settings = await response.json();
+                if (settings.SiteTitle) {
+                    document.getElementById('page-title').textContent = settings.SiteTitle;
+                    document.title = settings.SiteTitle; // تحديث عنوان تبويب المتصفح
+                }
+                if (settings.WelcomeMessage) {
+                    document.getElementById('welcome-message').textContent = settings.WelcomeMessage;
+                }
+           
+                 if (settings.ContactPhone) {
+                     const contactDiv = document.createElement('div');
+                     contactDiv.innerHTML = `<p>للتواصل: ${settings.ContactPhone}</p>`;
+                     document.querySelector('.container').appendChild(contactDiv);
+                 }
+            } catch (error) {
+                console.error("خطأ في تحميل الإعدادات:", error);
+            }
+        }
+
+      
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=getProducts`);
+                if (!response.ok) {
+                    throw new Error('فشل تحميل المنتجات: ' + response.statusText);
+                }
+                productsData = await response.json();
+                renderProducts();
+            } catch (error) {
+                console.error("خطأ في تحميل المنتجات:", error);
+                document.getElementById('product-list').innerHTML = '<p class="error">فشل تحميل المنتجات. الرجاء المحاولة لاحقاً.</p>';
+            }
+        }
+
+       
+        function renderProducts() {
+            const productListDiv = document.getElementById('product-list');
+            productListDiv.innerHTML = '';
+
+            if (productsData.length === 0) {
+                productListDiv.innerHTML = '<p>لا توجد منتجات متاحة حالياً.</p>';
+                return;
+            }
+
+            productsData.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.innerHTML = `
+                    <h3>${product.Name}</h3>
+                    ${product.Description ? `<p>${product.Description}</p>` : ''}
+                    <p class="price">السعر: ${product.Price} شيكل</p>
+                    ${product.ImageUrl ? `<img src="${product.ImageUrl}" alt="${product.Name}">` : ''}
+                    <label for="qty-${product.ID}">الكمية:</label>
+                    <input type="number" id="qty-${product.ID}" value="0" min="0"> `;
+                productListDiv.appendChild(productItem);
+            });
+        }
+
+      
 async function submitOrder() {
     // نستخدم currentUserData بدلاً من حقل customer-name القابل للتعديل
     // هذا يضمن أن اسم المحل ومعرفه يأتي من الحساب المسجل وليس من حقل نصي.
