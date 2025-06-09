@@ -113,6 +113,7 @@
             params.append('action', 'login'); // تحديد العملية كـ 'login'
             params.append('username', username);
             params.append('password', password);
+            console.log('Login URL being sent: ' + `<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`); // *** جديد للتشخيص ***
 
             try {
                 const response = await fetch(`<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`, {
