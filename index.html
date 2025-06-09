@@ -4,10 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Dakran >> Order </title> 
-    <style> <link rel="stylesheet" href="style.css"> </style>  </head>
+     <link rel="stylesheet" href="style.css">
+     <style>
+       
+        .user-info {
+            text-align: left; 
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; 
+        }
+        .logout-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+    
+        #customer-name {
+            width: calc(100% - 20px); 
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+    </style>
+    </head>
+    
 <body>
     <div class="container">
-        <h1 id="site-title">DaKraN</h1> <p id="welcome-message">...</p> <h2>منتجاتنا:</h2>
+        <div class="user-info">
+            مرحباً بك، <span id="display-username"></span> (محل: <span id="display-shopname"></span>)
+            <button id="logout-button" class="logout-button">تسجيل الخروج</button>
+        </div>
+        <h1 id="site-title">تحميل...</h1>
+        <p id="welcome-message">...</p>
+
+        <h2>منتجاتنا:</h2>
+
+        <div class="controls">
+            <input type="text" id="search-input" placeholder="ابحث عن منتج..." onkeyup="filterProducts()">
+            <select id="category-filter" onchange="filterProducts()">
+                <option value="">جميع الفئات</option>
+            </select>
+        </div>
+
         <div id="product-list" class="product-list">
             <p class="loading">جارٍ تحميل المنتجات...</p>
         </div>
@@ -16,7 +70,7 @@
 
         <h2>تقديم طلب جديد</h2>
         <label for="customer-name">اسم المحل الخاص بك:</label><br>
-        <input type="text" id="customer-name" required placeholder="مثال: بقالة الأمل"><br><br>
+        <input type="text" id="customer-name" readonly><br><br> 
 
         <label for="notes">ملاحظات إضافية على الطلب (اختياري):</label><br>
         <textarea id="notes" rows="4" placeholder="اكتب هنا أي ملاحظات خاصة بالطلب أو التسليم"></textarea><br><br>
@@ -25,6 +79,6 @@
         <p id="response-message" class="message"></p>
     </div>
 
-    <script src="script.js"> </script>
+    <script src="script.js"></script> 
 </body>
 </html>
