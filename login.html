@@ -116,9 +116,9 @@
             console.log('Login URL being sent: ' + `<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`); // *** جديد للتشخيص ***
 
             try {
-                const response = await fetch(`<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`, {
-                    method: 'GET'
-                });
+               const response = await fetch(`${WEB_APP_URL}?${params.toString()}`, {
+    method: 'GET'
+});
 
                 if (!response.ok) {
                     throw new Error('فشل الاتصال: ' + response.statusText);
