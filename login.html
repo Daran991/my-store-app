@@ -107,18 +107,18 @@
             }
 
             loginMessage.textContent = 'جارٍ تسجيل الدخول...';
-            loginMessage.classList.remove('error'); // إزالة رسالة الخطأ السابقة
+            loginMessage.classList.remove('error'); 
 
             const params = new URLSearchParams();
-            params.append('action', 'login'); // تحديد العملية كـ 'login'
+            params.append('action', 'login'); 
             params.append('username', username);
             params.append('password', password);
-            console.log('Login URL being sent: ' + `<span class="math-inline">\{WEB\_APP\_URL\}?</span>{params.toString()}`); // *** جديد للتشخيص ***
 
             try {
-               const response = await fetch(`${WEB_APP_URL}?${params.toString()}`, {
-    method: 'GET'
-});
+                // ***** التصحيح هنا: سطر fetch بدون علامات HTML/Markdown *****
+                const response = await fetch(`${WEB_APP_URL}?${params.toString()}`, {
+                    method: 'GET'
+                });
 
                 if (!response.ok) {
                     throw new Error('فشل الاتصال: ' + response.statusText);
@@ -127,13 +127,12 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    // حفظ معلومات المستخدم في التخزين المحلي (Local Storage)
                     localStorage.setItem('loggedInUser', JSON.stringify({
                         username: result.username,
                         shopName: result.shopName,
-                        customerId: result.customerId // حفظ معرف العميل أيضاً
+                        customerId: result.customerId 
                     }));
-                    window.location.href = 'index.html'; // إعادة توجيه المستخدم إلى صفحة الطلبات
+                    window.location.href = 'index.html'; 
                 } else {
                     loginMessage.textContent = result.message || 'خطأ في اسم المستخدم أو كلمة المرور.';
                     loginMessage.classList.add('error');
