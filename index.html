@@ -47,10 +47,10 @@
 <body>
     <div class="container">
         <div class="user-info">
-            مرحباً بك، <span id="display-username"></span> (محل: <span id="display-shopname"></span>)
+            مرحباً بك، <span id="display-username"></span> (الاسم: <span id="display-shopname"></span>)
             <button id="logout-button" class="logout-button">تسجيل الخروج</button>
         </div>
-        <h1 id="site-title">تحميل...</h1>
+        <h1 id="site-title">DaKraN...</h1>
         <p id="welcome-message">...</p>
 
         <h2>منتجاتنا:</h2>
@@ -69,11 +69,11 @@
         <hr>
 
         <h2>تقديم طلب جديد</h2>
-        <label for="customer-name">اسم المحل الخاص بك:</label><br>
-        <input type="text" id="customer-name" ><br><br> 
+        <label for="customer-name">طلبية واردة بإسم :</label><br>
+        <input type="text" id="customer-name" readonly><br><br> 
 
-        <label for="notes">ملاحظات إضافية على الطلب (اختياري):</label><br>
-        <textarea id="notes" rows="4" placeholder="اكتب هنا أي ملاحظات خاصة بالطلب أو التسليم"></textarea><br><br>
+        <label for="notes">ملاحظات إضافية على الطلب (الاحسن تتعبى):</label><br>
+        <textarea id="notes" rows="4" placeholder="مثلا العنوان و الاسم و الشغلات هاي , اكتب هنا أي ملاحظات خاصة بالطلب أو التسليم"></textarea><br><br>
 
         <button onclick="submitOrder()">إرسال الطلب</button>
         <p id="response-message" class="message"></p>
