@@ -6,24 +6,24 @@ const loggedInUser = localStorage.getItem('loggedInUser');
 let currentUserData = null;
 
 if (!loggedInUser) {
-    // إذا لم يكن المستخدم مسجلاً، أعد توجيهه إلى صفحة تسجيل الدخول
+
     window.location.href = 'login.html'; 
 } else {
     currentUserData = JSON.parse(loggedInUser);
-    // تحديث رسالة الترحيب باسم المستخدم واسم المحل
+  
     document.getElementById('display-username').textContent = currentUserData.username;
     document.getElementById('display-shopname').textContent = currentUserData.shopName;
-    // ملء حقل اسم المحل في نموذج الطلب
+  
     document.getElementById('customer-name').value = currentUserData.shopName;
 
-    // منطق زر تسجيل الخروج
+  
     document.getElementById('logout-button').addEventListener('click', () => {
-        localStorage.removeItem('loggedInUser'); // حذف بيانات الجلسة
-        window.location.href = 'login.html'; // إعادة توجيه إلى صفحة تسجيل الدخول
+        localStorage.removeItem('loggedInUser'); 
+        window.location.href = 'login.html'; 
     });
 }
 
-// *** نهاية منطق التحقق من تسجيل الدخول ***
+
 
 let allProducts = []; 
 let displayedProducts = []; 
@@ -39,15 +39,17 @@ async function loadSettings() {
         if (settings.WelcomeMessage) {
             document.getElementById('welcome-message').textContent = settings.WelcomeMessage;
         }
-        // هذا الجزء كان موجوداً في HTML ولكنه غير مستخدم حالياً في هذا الكود
-        // if (settings.ContactPhone) {
-        //     const contactDiv = document.createElement('div');
-        //     contactDiv.innerHTML = `<p>للتواصل: ${settings.ContactPhone}</p>`;
-        //     document.querySelector('.container').appendChild(contactDiv);
-        // }
+
+     //**
+         if (settings.ContactPhone) {
+            const contactDiv = document.createElement('div');
+           contactDiv.innerHTML = `<p>للتواصل: ${settings.ContactPhone}</p>`;
+            document.querySelector('.container').appendChild(contactDiv);
+         }
     } catch (error) {
         console.error("خطأ في تحميل الإعدادات:", error);
     }
+ //**
 }
 
 async function loadProducts() {
@@ -56,22 +58,22 @@ async function loadProducts() {
         if (!response.ok) {
             throw new Error('فشل تحميل المنتجات: ' + response.statusText);
         }
-        allProducts = await response.json(); // تخزين جميع المنتجات هنا
-        populateCategories(); // ملء قائمة الفئات
-        filterProducts(); // عرض جميع المنتجات في البداية (أو تطبيق أي تصفية افتراضية)
+        allProducts = await response.json(); 
+        populateCategories(); 
+        filterProducts(); 
     } catch (error) {
         console.error("خطأ في تحميل المنتجات:", error);
         document.getElementById('product-list').innerHTML = '<p class="error">فشل تحميل المنتجات. الرجاء المحاولة لاحقاً.</p>';
     }
 }
 
-// دالة جديدة لملء قائمة الفئات
+
 function populateCategories() {
     const categoryFilter = document.getElementById('category-filter');
-    const categories = new Set(); // لاستخراج الفئات الفريدة
+    const categories = new Set(); 
 
     allProducts.forEach(product => {
-        if (product.Category) { // تأكد أن عمود Category موجود في الشيت
+        if (product.Category) { 
             categories.add(product.Category);
         }
     });
@@ -84,7 +86,7 @@ function populateCategories() {
     });
 }
 
-// دالة جديدة لتصفية وعرض المنتجات
+
 function filterProducts() {
     const searchInput = document.getElementById('search-input').value.toLowerCase();
     const categoryFilter = document.getElementById('category-filter').value;
@@ -96,10 +98,10 @@ function filterProducts() {
         return matchesSearch && matchesCategory;
     });
 
-    renderDisplayedProducts(); // دالة جديدة لعرض المنتجات المفلترة
+    renderDisplayedProducts(); 
 }
 
-// دالة لعرض المنتجات التي تم تحديدها للعرض
+
 function renderDisplayedProducts() {
     const productListDiv = document.getElementById('product-list');
     productListDiv.innerHTML = ''; 
@@ -124,7 +126,7 @@ function renderDisplayedProducts() {
     });
 }
 
-// دالة لإرسال الطلب (عبر GET)
+
 async function submitOrder() {
     const shopName = currentUserData.shopName; 
     const customerId = currentUserData.customerId; 
@@ -179,7 +181,7 @@ async function submitOrder() {
     params.append('submittedByCustomerId', customerId); 
 
     try {
-        // ***** التصحيح هنا: سطر fetch بدون علامات HTML/Markdown *****
+      
         const response = await fetch(`${WEB_APP_URL}?${params.toString()}`, {
             method: 'GET' 
         });
@@ -210,7 +212,7 @@ async function submitOrder() {
     }
 }
 
-// يجب أن يتم استدعاء هذه الدوال فقط بعد التحقق من تسجيل الدخول
+
 if (currentUserData) { 
     loadSettings();
     loadProducts(); 
