@@ -87,9 +87,9 @@
     </div>
 
     <script>
-        // ************ مهم جداً: استبدل هذا بالرابط الصحيح لتطبيق الويب الخاص بك من Google Apps Script ************
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx1-IelSsYxZMZDQuJWGcBVwVUS23n5mdtjGtR5yRhWofNav7qdfu1zSU6v8yJLIouh3g/exec'; // هذا هو نفس الرابط المستخدم في index.html
-        // *******************************************************************************************************
+        // *****
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx1-IelSsYxZMZDQuJWGcBVwVUS23n5mdtjGtR5yRhWofNav7qdfu1zSU6v8yJLIouh3g/exec'; 
+        // *****
 
         const loginButton = document.getElementById('login-button');
         const usernameInput = document.getElementById('username');
@@ -115,7 +115,7 @@
             params.append('password', password);
 
             try {
-                // ***** التصحيح هنا: سطر fetch بدون علامات HTML/Markdown *****
+               
                 const response = await fetch(`${WEB_APP_URL}?${params.toString()}`, {
                     method: 'GET'
                 });
